@@ -65,7 +65,9 @@ ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.2.0.1
 ip route 1.1.1.1 255.255.255.255 Tunnel101
 ! static routes for spoke1 pointing to Tunnel101, so that spoke1 loopback is reachable
 ip route 10.1.0.0 255.255.0.0 Tunnel101
-ipv6 route ac1:cab:deca:deed::/64 Tunnel101
+ipv6 route ac1:cab:deca:deed::/64 Tunnel0
+
+
 
 
 
