@@ -2,11 +2,14 @@ param location string = 'swedencentral'
 param Spoke1v4AddressRange string = '10.1.0.0/16'
 param Spoke1v6AddressRange string = 'ac1:cab:deca::/48'
 param Spoke1subnet1v4AddressRange string = '10.1.0.0/24'
+param Spoke1BastionSubnetAddressRange string = '10.1.1.0/24'
+
 param Spoke1subnet1v6AddressRange string = 'ac1:cab:deca:deed::/64'
 param Spoke2v4AddressRange string = '10.2.0.0/16'
 param Spoke2v6AddressRange string = 'ac2:cab:deca::/48'
 param Spoke2subnet1v4AddressRange string = '10.2.0.0/24'
 param Spoke2subnet1v6AddressRange string = 'ac2:cab:deca:deed::/64'
+param Spoke2BastionSubnetAddressRange string = '10.2.1.0/24'
 
 var vm1name = 'vm1'
 var vm1Ipv4Private = '10.1.0.4'
@@ -20,6 +23,10 @@ var csr1Ipv6Private = 'ac1:cab:deca:deed::5'
 var csr2name = 'c8k2'
 var csr2Ipv4Private = '10.2.0.5'
 var csr2Ipv6Private = 'ac2:cab:deca:deed::5'
+var bastion1name = 'bastion1'
+var bastion2name = 'bastion2'
+
+
 
 param adminUsername string = 'AzureAdmin'
 @secure()
@@ -51,8 +58,7 @@ resource prefixIpV6 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
     
   }
 }
-
-resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
   name: 'csr1pubIpV4'
   location: location
   sku:{
@@ -66,8 +72,36 @@ resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
     }
   }
 }
-resource csr2pubIpV4 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+resource csr2pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
   name: 'csr2pubIpV4'
+  location: location
+  sku:{
+    name: 'Standard'
+  }
+  properties:{
+    publicIPAllocationMethod: 'Static' 
+    publicIPAddressVersion: 'IPv4'
+    publicIPPrefix: {
+      id: prefixIpV4.id
+    }
+  }
+}
+resource bastion1pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+  name: 'bastion1pubIpV4'
+  location: location
+  sku:{
+    name: 'Standard'
+  }
+  properties:{
+    publicIPAllocationMethod: 'Static' 
+    publicIPAddressVersion: 'IPv4'
+    publicIPPrefix: {
+      id: prefixIpV4.id
+    }
+  }
+}
+resource bastion2pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+  name: 'bastion2pubIpV4'
   location: location
   sku:{
     name: 'Standard'
@@ -150,6 +184,15 @@ resource dsSpoke1subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
     }
   }
 }
+resource dsSpoke1BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
+  parent: dsSpoke1
+  name: 'BastionSubnet'
+  properties:{
+    addressPrefixes:[
+      Spoke1BastionSubnetAddressRange     
+    ]
+  }
+}
 
 resource dsSpoke2 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   name: 'dsSpoke2'
@@ -174,6 +217,15 @@ resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
     networkSecurityGroup: {
       id: nsg.id
     }
+  }
+}
+resource dsSpoke2BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
+  parent: dsSpoke2
+  name: 'BastionSubnet'
+  properties:{
+    addressPrefixes:[
+      Spoke2BastionSubnetAddressRange     
+    ]
   }
 }
 
@@ -291,5 +343,23 @@ module vm2 'vm.bicep' = {
     privateIPv6: vm2Ipv6Private
     vmName: vm2name
     subnetId: dsSpoke2subnet1.id
+  }
+}
+module bastion1 'bastion.bicep' ={
+  name: 'bastion1'
+  params:{
+    location: location
+    bastionname: bastion1name
+    bassubnetid: dsSpoke1BastionSubnet.id
+    bastpubip: bastion1pubIpV4.id
+  }
+}
+module bastion2 'bastion.bicep' ={
+  name: 'bastion2'
+  params:{
+    location: location
+    bastionname: bastion2name
+    bassubnetid: dsSpoke2BastionSubnet.id
+    bastpubip: bastion2pubIpV4.id
   }
 }
