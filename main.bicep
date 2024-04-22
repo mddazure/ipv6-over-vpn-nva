@@ -19,7 +19,7 @@ var csr1Ipv4Private = '10.1.0.5'
 var csr1Ipv6Private = 'ac1:cab:deca:deed::5'
 var csr2name = 'c8k2'
 var csr2Ipv4Private = '10.2.0.5'
-var csr2Ipv6Private = 'ac1:cab:deca:deed::2'
+var csr2Ipv6Private = 'ac2:cab:deca:deed::5'
 
 param adminUsername string = 'AzureAdmin'
 @secure()
