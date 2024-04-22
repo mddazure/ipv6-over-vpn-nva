@@ -13,16 +13,16 @@ param Spoke2BastionSubnetAddressRange string = '10.2.1.0/24'
 
 var vm1name = 'vm1'
 var vm1Ipv4Private = '${substring(Spoke1subnet1v4AddressRange,0,7)}${'4'}' //'10.1.0.4'
-var vm1Ipv6Private = '${substring(Spoke1subnet1v6AddressRange,0,7)}${'4'}' //'ac1:cab:deca:deed::4'
+var vm1Ipv6Private = '${substring(Spoke1subnet1v6AddressRange,0,14)}${'4'}' //'ac1:cab:deca:deed::4'
 var vm2name = 'vm2'
 var vm2Ipv4Private = '${substring(Spoke2subnet1v4AddressRange,0,7)}${'4'}' //'10.2.0.4'
-var vm2Ipv6Private = '${substring(Spoke2subnet1v6AddressRange,0,7)}${'4'}' //'ac2:cab:deca:deed::4'
+var vm2Ipv6Private = '${substring(Spoke2subnet1v6AddressRange,0,14)}${'4'}' //'ac2:cab:deca:deed::4'
 var csr1name = 'c8k1'
 var csr1Ipv4Private = '${substring(Spoke1subnet1v4AddressRange,0,7)}${'5'}' //'10.1.0.5'
-var csr1Ipv6Private = '${substring(Spoke1subnet1v6AddressRange,0,7)}${'5'}' //'ac1:cab:deca:deed::5'
+var csr1Ipv6Private = '${substring(Spoke1subnet1v6AddressRange,0,14)}${'5'}' //'ac1:cab:deca:deed::5'
 var csr2name = 'c8k2'
 var csr2Ipv4Private = '${substring(Spoke2subnet1v4AddressRange,0,7)}${'5'}' //'10.2.0.5'
-var csr2Ipv6Private = '${substring(Spoke2subnet1v6AddressRange,0,7)}${'5'}' //'ac2:cab:deca:deed::5'
+var csr2Ipv6Private = '${substring(Spoke2subnet1v6AddressRange,0,14)}${'5'}' //'ac2:cab:deca:deed::5'
 var bastion1name = 'bastion1'
 var bastion2name = 'bastion2'
 
@@ -186,7 +186,7 @@ resource dsSpoke1subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
 }
 resource dsSpoke1BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
   parent: dsSpoke1
-  name: 'BastionSubnet'
+  name: 'AzureBastionSubnet'
   properties:{
     addressPrefixes:[
       Spoke1BastionSubnetAddressRange     
@@ -221,7 +221,7 @@ resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
 }
 resource dsSpoke2BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
   parent: dsSpoke2
-  name: 'BastionSubnet'
+  name: 'AzureBastionSubnet'
   properties:{
     addressPrefixes:[
       Spoke2BastionSubnetAddressRange     
