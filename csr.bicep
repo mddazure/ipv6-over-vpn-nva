@@ -32,7 +32,7 @@ resource nicPubIP 'Microsoft.Network/networkInterfaces@2020-08-01' = {
       {
         name: 'ipv6config0'
         properties:{
-          primary: true
+          primary: false
           privateIPAllocationMethod: 'Static'
           privateIPAddress: privateIpV6
           privateIPAddressVersion: 'IPv6'
