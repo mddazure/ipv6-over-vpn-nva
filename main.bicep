@@ -280,7 +280,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
 module csr1 'csr.bicep'= {
 name: 'csr1'
 dependsOn: [
-  dsSpoke1
+  dsSpoke1subnet1
   nsg
   csr1pubIpV4
 ]
@@ -298,7 +298,7 @@ params: {
 module csr2 'csr.bicep'= {
   name: 'csr2'
   dependsOn: [
-    dsSpoke2
+    dsSpoke2subnet1
     nsg
     csr2pubIpV4
   ]
