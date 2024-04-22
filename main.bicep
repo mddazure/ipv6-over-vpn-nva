@@ -345,7 +345,7 @@ module vm2 'vm.bicep' = {
     subnetId: dsSpoke2subnet1.id
   }
 }
-module bastion1 'bastion.bicep' ={
+/*module bastion1 'bastion.bicep' ={
   name: 'bastion1'
   params:{
     location: location
@@ -362,4 +362,4 @@ module bastion2 'bastion.bicep' ={
     bassubnetid: dsSpoke2BastionSubnet.id
     bastpubip: bastion2pubIpV4.id
   }
-}
+}*/
