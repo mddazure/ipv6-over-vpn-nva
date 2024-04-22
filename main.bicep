@@ -8,9 +8,22 @@ param Spoke2v6AddressRange string = 'ac2:cab:deca::/48'
 param Spoke2subnet1v4AddressRange string = '10.2.0.0/24'
 param Spoke2subnet1v6AddressRange string = 'ac2:cab:deca:deed::/64'
 
+var vm1name = 'vm1'
+var vm1Ipv4Private = '10.1.0.4'
+var vm1Ipv6Private = 'ac1:cab:deca:deed::4'
+var vm2name = 'vm2'
+var vm2Ipv6Private = 'ac2:cab:deca:deed::4'
+var vm2Ipv4Private = '10.2.0.4'
+var csr1name = 'csr1'
+var csr1Ipv4Private = '10.1.0.5'
+var csr1Ipv6Private = 'ac1:cab:deca:deed::5'
+var csr2name = 'csr2'
+var csr2Ipv4Private = '10.2.0.5'
+var csr2Ipv6Private = 'ac1:cab:deca:deed::2'
+
 param adminUsername string = 'AzureAdmin'
 @secure()
-param adminPassword string = 'ipV6demo-2021'
+param adminPassword string = 'ipV6demo-2024'
 
 //public IP prefixes
 resource prefixIpV4 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
@@ -39,8 +52,8 @@ resource prefixIpV6 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
   }
 }
 
-resource pubIpV41 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
-  name: 'instancePubIpV4-1'
+resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+  name: 'csr1pubIpV4'
   location: location
   sku:{
     name: 'Standard'
@@ -53,8 +66,8 @@ resource pubIpV41 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
     }
   }
 }
-resource pubIpV42 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
-  name: 'instancePubIpV4-2'
+resource csr2pubIpV4 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
+  name: 'csr2pubIpV4'
   location: location
   sku:{
     name: 'Standard'
@@ -122,22 +135,22 @@ resource dsSpoke1 'Microsoft.Network/virtualNetworks@2020-11-01' = {
         Spoke1v6AddressRange
       ]
     }
-    subnets:[
-      {
-      name: 'subnet1'
-      properties:{
-        addressPrefixes:[
-          Spoke1subnet1v4AddressRange
-          Spoke1subnet1v6AddressRange
-        ]
-        networkSecurityGroup: {
-          id: nsg.id
-        }
-      }
-    }     
-    ]
   }
 }
+resource dsSpoke1subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
+  parent: dsSpoke1
+  name: 'dsSpoke1subnet1'
+  properties:{
+    addressPrefixes:[
+      Spoke1subnet1v4AddressRange
+      Spoke1subnet1v6AddressRange
+    ]
+    networkSecurityGroup: {
+      id: nsg.id
+    }
+  }
+}
+
 resource dsSpoke2 'Microsoft.Network/virtualNetworks@2020-11-01' = {
   name: 'dsSpoke2'
   location: location
@@ -148,20 +161,19 @@ resource dsSpoke2 'Microsoft.Network/virtualNetworks@2020-11-01' = {
         Spoke2v6AddressRange
       ]
     }
-    subnets:[
-      {
-      name: 'subnet1'
-      properties:{
-        addressPrefixes:[
-          Spoke2subnet1v4AddressRange
-          Spoke2subnet1v6AddressRange
-        ]
-        networkSecurityGroup: {
-          id: nsg.id
-        }
-      }
-    }     
+  }
+}
+resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
+  parent: dsSpoke2
+  name: 'dsSpoke1subnet2'
+  properties:{
+    addressPrefixes:[
+      Spoke2subnet1v4AddressRange
+      Spoke2subnet1v6AddressRange
     ]
+    networkSecurityGroup: {
+      id: nsg.id
+    }
   }
 }
 
@@ -211,5 +223,73 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           }
       }
     ]
+  }
+}
+module csr1 'csr.bicep'= {
+name: 'csr1'
+dependsOn: [
+  dsSpoke1
+  nsg
+  csr1pubIpV4
+]
+params: {
+  adminUser: adminUsername
+  adminPw: adminPassword
+  vmName: csr1name
+  pubIpv4Id: csr1pubIpV4.id
+  subnetId: dsSpoke1subnet1.id
+  location: location
+  privateIpV4: csr1Ipv4Private
+  privateIpV6: csr1Ipv6Private
+  }
+}
+module csr2 'csr.bicep'= {
+  name: 'csr2'
+  dependsOn: [
+    dsSpoke2
+    nsg
+    csr2pubIpV4
+  ]
+  params: {
+    adminUser: adminUsername
+    adminPw: adminPassword
+    vmName: csr2name
+    pubIpv4Id: csr2pubIpV4.id
+    subnetId: dsSpoke2subnet1.id
+    location: location
+    privateIpV4: csr2Ipv4Private
+    privateIpV6: csr2Ipv6Private
+    }
+  }
+module vm1 'vm.bicep' = {
+  name: 'vm1'
+  dependsOn: [
+    dsSpoke1
+    nsg
+  ]
+  params: {
+    adminUser: adminUsername
+    adminPw: adminPassword
+    location: location
+    privateIPv4: vm1Ipv4Private
+    privateIPv6: vm1Ipv6Private
+    vmName: vm1name
+    subnetId: dsSpoke1subnet1.id
+  }
+}
+module vm2 'vm.bicep' = {
+  name: 'vm2'
+  dependsOn: [
+    dsSpoke2
+    nsg
+  ]
+  params: {
+    adminUser: adminUsername
+    adminPw: adminPassword
+    location: location
+    privateIPv4: vm2Ipv4Private
+    privateIPv6: vm2Ipv6Private
+    vmName: vm2name
+    subnetId: dsSpoke2subnet1.id
   }
 }

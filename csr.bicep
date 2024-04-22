@@ -5,9 +5,8 @@ param adminPw string
 param location string
 param subnetId string
 param pubIpv4Id string
-param privateIPv4 string
-param bootstUri string
-
+param privateIpV4 string
+param privateIpV6 string
 
 resource nicPubIP 'Microsoft.Network/networkInterfaces@2020-08-01' = {
   name: '${vmName}-nic'
@@ -20,14 +19,26 @@ resource nicPubIP 'Microsoft.Network/networkInterfaces@2020-08-01' = {
         properties:{
           primary: true
           privateIPAllocationMethod: 'Static'
+          privateIPAddress: privateIpV4
           privateIPAddressVersion: 'IPv4'
           subnet: {
             id: subnetId
           }
           publicIPAddress: {
             id: pubIpv4Id
+          }        
+        }
+      }
+      {
+        name: 'ipv6config0'
+        properties:{
+          primary: true
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: privateIpV6
+          privateIPAddressVersion: 'IPv6'
+          subnet: {
+            id: subnetId
           }
-          privateIPAddress: privateIPv4          
         }
       }
     ]
@@ -69,7 +80,6 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       diagnosticsProfile: {
         bootDiagnostics: {
           enabled: true
-          storageUri: bootstUri
         }
       }
       networkProfile: {

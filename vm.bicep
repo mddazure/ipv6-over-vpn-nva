@@ -4,8 +4,8 @@ param adminUser string
 param adminPw string
 param location string
 param subnetId string
-param pubIpv4Id string
-param pubIpv6Id string
+param privateIPv4 string
+param privateIPv6 string
 var imagePublisher = 'MicrosoftWindowsServer'
 var imageOffer = 'WindowsServer'
 var imageSku = '2022-Datacenter'
@@ -19,26 +19,22 @@ resource nicPubIP 'Microsoft.Network/networkInterfaces@2020-08-01' = {
         name: 'ipv4config0'
         properties:{
           primary: true
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: privateIPv4
           privateIPAddressVersion: 'IPv4'
           subnet: {
             id: subnetId
-          }
-          publicIPAddress: {
-            id: pubIpv4Id
           }
         }
       }
       {
         name: 'ipv6config0'
         properties:{
-          privateIPAllocationMethod: 'Dynamic'
+          privateIPAllocationMethod: 'Static'
+          privateIPAddress: privateIPv6
           privateIPAddressVersion: 'IPv6'
           subnet: {
             id: subnetId
-          }
-          publicIPAddress: {
-            id: pubIpv6Id
           }          
         }
       }
