@@ -1,4 +1,4 @@
-param location string = 'westeurope'
+param location string = 'swedencentral'
 param Spoke1v4AddressRange string = '10.1.0.0/16'
 param Spoke1v6AddressRange string = 'ac1:cab:deca::/48'
 param Spoke1subnet1v4AddressRange string = '10.1.0.0/24'
