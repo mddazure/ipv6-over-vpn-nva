@@ -208,7 +208,7 @@ resource dsSpoke2 'Microsoft.Network/virtualNetworks@2020-11-01' = {
 }
 resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
   parent: dsSpoke2
-  name: 'dsSpoke1subnet2'
+  name: 'dsSpoke2subnet1'
   properties:{
     addressPrefixes:[
       Spoke2subnet1v4AddressRange
