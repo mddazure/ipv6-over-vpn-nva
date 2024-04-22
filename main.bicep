@@ -318,6 +318,7 @@ module vm1 'vm.bicep' = {
   dependsOn: [
     dsSpoke1
     nsg
+    csr1
   ]
   params: {
     adminUser: adminUsername
@@ -334,6 +335,7 @@ module vm2 'vm.bicep' = {
   dependsOn: [
     dsSpoke2
     nsg
+    csr2
   ]
   params: {
     adminUser: adminUsername
