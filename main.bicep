@@ -187,6 +187,9 @@ resource dsSpoke1subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
 resource dsSpoke1BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
   parent: dsSpoke1
   name: 'AzureBastionSubnet'
+  dependsOn:[
+    dsSpoke1subnet1
+  ]
   properties:{
     addressPrefixes:[
       Spoke1BastionSubnetAddressRange     
@@ -222,6 +225,9 @@ resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
 resource dsSpoke2BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
   parent: dsSpoke2
   name: 'AzureBastionSubnet'
+  dependsOn:[
+    dsSpoke2subnet1
+  ]
   properties:{
     addressPrefixes:[
       Spoke2BastionSubnetAddressRange     
