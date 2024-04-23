@@ -285,11 +285,6 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
 }
 module csr1 'csr.bicep'= {
 name: 'csr1'
-dependsOn: [
-  dsSpoke1subnet1
-  nsg
-  csr1pubIpV4
-]
 params: {
   adminUser: adminUsername
   adminPw: adminPassword
@@ -303,11 +298,6 @@ params: {
 }
 module csr2 'csr.bicep'= {
   name: 'csr2'
-  dependsOn: [
-    dsSpoke2subnet1
-    nsg
-    csr2pubIpV4
-  ]
   params: {
     adminUser: adminUsername
     adminPw: adminPassword
@@ -321,11 +311,6 @@ module csr2 'csr.bicep'= {
   }
 module vm1 'vm.bicep' = {
   name: 'vm1'
-  dependsOn: [
-    dsSpoke1subnet1
-    nsg
-    csr1
-  ]
   params: {
     adminUser: adminUsername
     adminPw: adminPassword
@@ -338,11 +323,6 @@ module vm1 'vm.bicep' = {
 }
 module vm2 'vm.bicep' = {
   name: 'vm2'
-  dependsOn: [
-    dsSpoke2subnet1
-    nsg
-    csr2
-  ]
   params: {
     adminUser: adminUsername
     adminPw: adminPassword
