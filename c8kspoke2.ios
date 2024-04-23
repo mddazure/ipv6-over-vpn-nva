@@ -54,8 +54,11 @@ interface Tunnel0
  ipv6 enable
 ! default route pointing to CSR subnet default gateway, so that tunnel outside traffic and internet go out LAN port
 ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.2.0.1
-! static routes for spoke1 pointing to Tunnel101, so that spoke1 loopback is reachable
+! static routes for spoke1 pointing to Tunnel101
 ip route 10.1.0.0 255.255.0.0 Tunnel101
+! ipv6 default route pointing to Gig1
+ipv6 route ::/0 GigabitEthernet1
+! static route for spoke1 ipv6 pointing to Tunnel0
 ipv6 route ac1:cab:deca:deed::/64 Tunnel0
 
 
