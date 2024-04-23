@@ -316,7 +316,7 @@ module csr2 'csr.bicep'= {
 module vm1 'vm.bicep' = {
   name: 'vm1'
   dependsOn: [
-    dsSpoke1
+    dsSpoke1subnet1
     nsg
     csr1
   ]
@@ -333,7 +333,7 @@ module vm1 'vm.bicep' = {
 module vm2 'vm.bicep' = {
   name: 'vm2'
   dependsOn: [
-    dsSpoke2
+    dsSpoke2subnet1
     nsg
     csr2
   ]
