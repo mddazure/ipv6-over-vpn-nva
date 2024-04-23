@@ -259,7 +259,7 @@ resource udr1 'Microsoft.Network/routeTables@2023-09-01' = {
         properties: {
           addressPrefix: Spoke2v6AddressRange
           nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: csr1Ipv4Private
+          nextHopIpAddress: csr1Ipv6Private
         }
       }
     ]
@@ -283,7 +283,7 @@ resource udr2 'Microsoft.Network/routeTables@2023-09-01' = {
         properties: {
           addressPrefix: Spoke1v6AddressRange
           nextHopType: 'VirtualAppliance'
-          nextHopIpAddress: csr2Ipv4Private
+          nextHopIpAddress: csr2Ipv6Private
         }
       }
     ]
