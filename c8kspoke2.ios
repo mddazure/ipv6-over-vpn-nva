@@ -1,6 +1,6 @@
-/*license boot level network-advantage addon dna-advantage
+license boot level network-advantage addon dna-advantage
 do wr mem
-do reload*/
+do reload
 
 ipv6 unicast-routing
 
@@ -36,13 +36,18 @@ crypto ipsec profile ipsec-c8kspoke1
 !
 interface Tunnel101
  ip address 172.16.0.2 255.255.255.252
- ipv6 address FC::2/64
- ipv6 enable
  ip tcp adjust-mss 1350
  tunnel source GigabitEthernet1
  tunnel mode ipsec ipv4
  tunnel destination <c8k1-pubIPv4>
  tunnel protection ipsec profile ipsec-c8kspoke1
+!
+interface Tunnel0
+  ipv6 address FC::2/64
+  ipv6 enable
+  tunnel source Tunnel101
+  tunnel destination 172.16.0.1
+  tunnel mode ipv6ip
 !
  interface GigabitEthernet1
  ipv6 address dhcp rapid-commit

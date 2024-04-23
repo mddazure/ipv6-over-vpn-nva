@@ -182,6 +182,9 @@ resource dsSpoke1subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
     networkSecurityGroup: {
       id: nsg.id
     }
+    routeTable: {
+      id: udr1.id
+    }
   }
 }
 resource dsSpoke1BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
@@ -220,6 +223,9 @@ resource dsSpoke2subnet1 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' 
     networkSecurityGroup: {
       id: nsg.id
     }
+    routeTable: {
+      id: udr2.id
+    }
   }
 }
 resource dsSpoke2BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-09-01' = {
@@ -234,6 +240,56 @@ resource dsSpoke2BastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2023-0
     ]
   }
 }
+//UDRs
+resource udr1 'Microsoft.Network/routeTables@2023-09-01' = {
+  name: 'udr1'
+  location: location
+  properties: {
+    routes: [
+      {
+        name: 'spoke2v4'
+        properties: {
+          addressPrefix: Spoke2v4AddressRange
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: csr1Ipv4Private
+         }
+      }
+      {
+        name: 'spoke2v6'
+        properties: {
+          addressPrefix: Spoke2v6AddressRange
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: csr1Ipv4Private
+        }
+      }
+    ]
+  }
+}
+resource udr2 'Microsoft.Network/routeTables@2023-09-01' = {
+  name: 'udr2'
+  location: location
+  properties: {
+    routes: [
+      {
+        name: 'spoke1v4'
+        properties: {
+          addressPrefix: Spoke1v4AddressRange
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: csr2Ipv4Private
+         }
+      }
+      {
+        name: 'spoke1v6'
+        properties: {
+          addressPrefix: Spoke1v6AddressRange
+          nextHopType: 'VirtualAppliance'
+          nextHopIpAddress: csr2Ipv4Private
+        }
+      }
+    ]
+  }
+}
+
 
 //NSG
 resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
@@ -333,7 +389,7 @@ module vm2 'vm.bicep' = {
     subnetId: dsSpoke2subnet1.id
   }
 }
-/*module bastion1 'bastion.bicep' ={
+module bastion1 'bastion.bicep' ={
   name: 'bastion1'
   params:{
     location: location
@@ -350,4 +406,4 @@ module bastion2 'bastion.bicep' ={
     bassubnetid: dsSpoke2BastionSubnet.id
     bastpubip: bastion2pubIpV4.id
   }
-}*/
+}
