@@ -15,7 +15,18 @@ Log in to Azure Cloud Shell at https://shell.azure.com/ and select Bash.
 
 Create an empty Resource Group:
 
-            az group create --name [rg-name] --location [azure-region]
+    az group create --name [rg-name] --location [azure-region]
+Clone the repo to Cloud Shell or a local machine with az cli installed:
+
+    git clone https://github.com/mddazure/ipv6-over-vpn-nva
+
+Change directory: 
+
+
+
+
+
+
 
 # Configuration
 
