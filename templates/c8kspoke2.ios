@@ -1,6 +1,6 @@
-license boot level network-advantage addon dna-advantage
-do wr mem
-do reload
+!license boot level network-advantage addon dna-advantage
+!do wr mem
+!do reload
 
 ipv6 unicast-routing
 
