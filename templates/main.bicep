@@ -58,8 +58,8 @@ resource prefixIpV6 'Microsoft.Network/publicIPPrefixes@2020-11-01' = {
     
   }
 }
-resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
-  name: 'csr1pubIpV4'
+resource c8k1pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+  name: 'c8k1pubIpV4'
   location: location
   sku:{
     name: 'Standard'
@@ -72,8 +72,8 @@ resource csr1pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
     }
   }
 }
-resource csr2pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
-  name: 'csr2pubIpV4'
+resource c8k2pubIpV4 'Microsoft.Network/publicIPAddresses@2023-09-01' = {
+  name: 'c8k2pubIpV4'
   location: location
   sku:{
     name: 'Standard'
@@ -311,6 +311,19 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           }
       }
       {
+        name: 'allowprefixIpV4in'
+        properties:{
+          priority: 200
+          direction: 'Inbound'
+          protocol: 'Tcp'
+          access: 'Allow'
+          sourceAddressPrefix: prefixIpV4.properties.ipPrefix
+          sourcePortRange: '*'
+          destinationAddressPrefix: '*'
+          destinationPortRange: '*'
+          }
+      }
+      {
         name: 'allowAllout'
         properties:{
           priority: 250
@@ -345,7 +358,7 @@ params: {
   adminUser: adminUsername
   adminPw: adminPassword
   vmName: csr1name
-  pubIpv4Id: csr1pubIpV4.id
+  pubIpv4Id: c8k1pubIpV4.id
   subnetId: dsSpoke1subnet1.id
   location: location
   privateIpV4: csr1Ipv4Private
@@ -358,7 +371,7 @@ module csr2 'csr.bicep'= {
     adminUser: adminUsername
     adminPw: adminPassword
     vmName: csr2name
-    pubIpv4Id: csr2pubIpV4.id
+    pubIpv4Id: c8k2pubIpV4.id
     subnetId: dsSpoke2subnet1.id
     location: location
     privateIpV4: csr2Ipv4Private
