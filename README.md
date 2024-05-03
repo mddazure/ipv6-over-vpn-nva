@@ -101,7 +101,7 @@ Static routes for the remote VNET's IPv4 and IPv6 address space point to interfa
 
 User Defined Routes on the subnets in both VNETs direct traffic for the remote VNET's IPv4 and IPv6 address space to the local router's LAN interface. 
 
-Dynamic routing using Azure Route Server is not possible as ARS does not support IPv6.  
+Dynamic routing leveraging Azure Route Server is not possible, as ARS does not support IPv6.  
 
 # Testing
 Connect to vm1 from bastion1:
@@ -113,7 +113,7 @@ Open a command prompt and access vm2's web server over IPv4 and IPv6:
     
     curl 10.2.0.4
 
-    curl curl [ac2:cab:deca:deed::4]:80
+    curl [ac2:cab:deca:deed::4]:80
 
 The response will be `vm2`.
 
