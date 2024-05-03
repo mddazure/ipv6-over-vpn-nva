@@ -324,29 +324,16 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
           }
       }
       {
-        name: 'allowAllout'
+        name: 'allowprefixIpV6in'
         properties:{
-          priority: 250
-          direction: 'Outbound'
-          protocol: 'Tcp'
+          priority: 201
+          direction: 'Inbound'
+          protocol: '*'
           access: 'Allow'
-          sourceAddressPrefix: '*'
+          sourceAddressPrefix: prefixIpV6.properties.ipPrefix
           sourcePortRange: '*'
           destinationAddressPrefix: '*'
           destinationPortRange: '*'
-          }
-      }
-      {
-        name: 'allow22in'
-        properties:{
-          priority: 160
-          direction: 'Inbound'
-          protocol: 'Tcp'
-          access: 'Allow'
-          sourceAddressPrefix: '*'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22'
           }
       }
     ]
