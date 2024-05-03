@@ -32,7 +32,7 @@ This deploys the components shown in the diagram above.
 
 # Configuration
 
-When deployment is completed, the routers must be configured.
+After deployment completes the routers must be configured.
 
 Use Serial Console in the portal, under the Help sub menu in the VM blade, to connect to the console of each of the routers.
 
@@ -93,11 +93,29 @@ Confirm the file name `start-up config`.
 This configuration creates an IPv4 IKEv2/IPSec VPN tunnel between the two routers, over their IPv4 public endpoints. This tunnel is represented by `interface Tunnel101` on both routers.
 An IPv6-in-IPv4 tunnel over the IPSec tunnel enables the transportation of IPv6. This is represented by `interface Tunnel0`.
 
-Static routes for the remote VNET's IPv4 and IPv6 address space point to `Tunnel101` and `Tunnel0` respectively.
+# Routing
+
+Static routes for the remote VNET's IPv4 and IPv6 address space point to interfaces `Tunnel101` and `Tunnel0` respectively.
+
+User Defined Routes on the subnets in both VNETs direct traffic for the remote VNET's IPv4 and IPv6 address space to the local router's LAN interface. 
+
+Dynamic routing using Azure Route Server is not possible as ARS does not support IPv6.  
 
 # Testing
+Connect to vm1 from bastion1:
+- IP address: 10.1.0.4
+- Username: AzureAdmin
+- Password: ipV6demo-2024
 
+Open a command prompt and access vm2's web server over IPv4 and IPv6:
+    
+    curl 10.2.0.4
 
+    curl curl [ac2:cab:deca:deed::4]:80
+
+The response will be `vm2`.
+
+This proves that both IPv4 and IPv6 connectivity exists between the VNETs over VPN.
 
 
 
