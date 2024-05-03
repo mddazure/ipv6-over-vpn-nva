@@ -315,7 +315,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-11-01' = {
         properties:{
           priority: 200
           direction: 'Inbound'
-          protocol: 'Tcp'
+          protocol: '*'
           access: 'Allow'
           sourceAddressPrefix: prefixIpV4.properties.ipPrefix
           sourcePortRange: '*'
