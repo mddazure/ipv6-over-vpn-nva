@@ -74,7 +74,7 @@ This process activates the crypto feature set and reboots the router.
 
 - In the portal, look up the public ip addresses of c8k1 and c8k2.
 
-- In the text files, replace the placeholder <c8k1-pubIPv4> by the public ip of c8k1, and replace <c8k2-pubIPv4> by the public ip of c8k2.
+- In the text files, replace the placeholder c8k1-pubIPv4 by the public ip of c8k1, and replace c8k2-pubIPv4 by the public ip of c8k2.
 
 When reboot has completed, log on to each router again.
 
