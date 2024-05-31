@@ -26,6 +26,10 @@ Change directory:
 
     cd ipv6-over-vpn-nva/templates
 
+Accept license terms for the Cisco 8000v Network Virtual Appliance:
+
+    az vm image terms accept --urn cisco:cisco-c8000v-byol:17_13_01a-byol:latest
+
 Deploy the lab:
 
     az deployment group create -n ipv6nva -g <rg-name> --template-file main.bicep
