@@ -5,7 +5,7 @@ VPN VNET Gateway does not.
 
 A VPN Gateway can be deployed in a dual stack VNET but will only enable IPv4 over VPN. The public (or private, in the case of VPN over ExpressRoute) tunnel endpoint addesses can also only be IPv4. IPv6 over VPN is in development at the time of this writing in May 2024, but an availability date has not been announced.
 
-Router- and Firewall Network Virtual Appliances from various vendors do support IPv6 VPN, and can be used as an alternative to the Azure-native VNET Gateway.
+Router- and Firewall Network Virtual Appliances from various vendors do support IPv6 VPN, and may be used as an alternative to the Azure-native VNET Gateway.
 
 This lab demonstrates an IPv6 VPN solution between two Cisco Catalyst 8000v routers.
 
